@@ -64,12 +64,12 @@ class InvoiceSettingsController extends Controller
      *
      * @return BaseResponse
      */
-    public function getSettings(): BaseResponse
+    public function getSettings($plentyId): BaseResponse
     {
         try {
             return $this->response->json([
                 'success' => true,
-                'settings' => $this->settingRepository->get()
+                'settings' => $this->settingRepository->get($plentyId)
             ]);
         } catch (\Exception $e) {
             $this->getLogger(__METHOD__)->exception(
@@ -91,12 +91,12 @@ class InvoiceSettingsController extends Controller
      *
      * @return BaseResponse
      */
-    public function saveSettings(): BaseResponse
+    public function saveSettings($plentyId): BaseResponse
     {
         try {
             return $this->response->json([
                 'success' => true,
-                'settings' => $this->settingRepository->save($this->request->except('plentymarkets'))
+                'settings' => $this->settingRepository->save($plentyId, $this->request->except('plentymarkets'))
             ]);
         } catch (\Exception $e) {
             $this->getLogger(__METHOD__)->exception(

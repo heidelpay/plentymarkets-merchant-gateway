@@ -101,10 +101,11 @@ class PluginServiceProvider extends ServiceProvider
             $this->paymentMethodEvents()
         );
 
+        $logger = $this->getLogger(__METHOD__);
         //Listen for the event that gets the payment method content before Order creation
         $eventDispatcher->listen(
             GetPaymentMethodContent::class,
-            function (GetPaymentMethodContent $event) use ($sessionHelper, $paymentHelper) {
+            function (GetPaymentMethodContent $event) use ($sessionHelper, $paymentHelper, $logger) {
                 try {
                     //skip not HeidelpayMGW payment
                     if (!$paymentHelper->isHeidelpayMGWMOP($event->getMop())) {
@@ -121,7 +122,7 @@ class PluginServiceProvider extends ServiceProvider
                         return $event->setType($response['type']);
                     }
                 } catch (\Exception $e) {
-                    $this->getLogger(__METHOD__)->exception(
+                    $logger->exception(
                         'translation.exception',
                         [
                             'error' => $e->getMessage()
@@ -129,7 +130,7 @@ class PluginServiceProvider extends ServiceProvider
                     );
                 }
 
-                $this->getLogger(__METHOD__)->exception(
+                $logger->exception(
                     'translation.noPaymentResource',
                     [
                         'methodOfPayment' => $event->getMop(),
@@ -148,7 +149,7 @@ class PluginServiceProvider extends ServiceProvider
         //Listen for the event that executes the payment after Order creat
         $eventDispatcher->listen(
             ExecutePayment::class,
-            function (ExecutePayment $event) use ($paymentHelper, $sessionHelper, $paymentInformationRepository) {
+            function (ExecutePayment $event) use ($paymentHelper, $sessionHelper, $paymentInformationRepository, $logger) {
                 try {
                     //if payment method not ours, we don't care
                     if (!$paymentHelper->isHeidelpayMGWMOP($event->getMop())) {
@@ -161,7 +162,7 @@ class PluginServiceProvider extends ServiceProvider
                         $paymentHelper->handlePayment($paymentResource, $event->getOrderId(), $event->getMop());
                     }
                 } catch (\Exception $e) {
-                    $this->getLogger(__METHOD__)->exception(
+                    $logger->exception(
                         'translation.exception',
                         [
                             'error' => $e->getMessage()
@@ -177,7 +178,7 @@ class PluginServiceProvider extends ServiceProvider
         //Handle document generation
         $eventDispatcher->listen(
             OrderPdfGenerationEvent::class,
-            static function (OrderPdfGenerationEvent $event) use ($paymentHelper, $paymentInformationRepository) {
+            static function (OrderPdfGenerationEvent $event) use ($paymentHelper, $paymentInformationRepository, $logger) {
                 try {
                     /** @var Order $order */
                     $order = $event->getOrder();
@@ -217,12 +218,14 @@ class PluginServiceProvider extends ServiceProvider
                             break;
                     }
                 } catch (\Exception $e) {
-                    $this->getLogger(__METHOD__)->exception(
+                    $logger->exception(
                         'translation.exception',
                         [
                             'error' => $e->getMessage()
                         ]
                     );
+
+                    throw $e;
                 }
             }
         );

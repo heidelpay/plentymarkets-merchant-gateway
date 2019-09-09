@@ -30,8 +30,11 @@ use Plenty\Modules\Plugin\DataBase\Contracts\Model;
  */
 class InvoiceGuaranteedSetting extends Model
 {
-    /** @var int $id Model ID in the database. We don't need autoincrement so we set ID always to 1 */
-    public $id = 1;
+    /** @var int $id Model ID in the database */
+    public $id = 0;
+
+    /** @var int $plentyId The ID of plenty shop that settings are saved for */
+    public $plentyId = 0;
 
     /** @var bool $isActive */
     public $isActive = false;
@@ -79,6 +82,7 @@ class InvoiceGuaranteedSetting extends Model
      */
     public function set($data): InvoiceGuaranteedSetting
     {
+        $this->plentyId = $data['plentyId'];
         // if parameter is null we set default value
         $this->isActive = $data['isActive'] ?? false;
         $this->displayName = $data['displayName'] ?? '';

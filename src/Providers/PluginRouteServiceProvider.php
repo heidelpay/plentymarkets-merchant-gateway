@@ -52,17 +52,17 @@ class PluginRouteServiceProvider extends RouteServiceProvider
             ['namespace' => 'HeidelpayMGW\Controllers', 'middleware' => 'oauth'],
             function ($apiRouter) {
                 //Plugin settings
-                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/plugin-settings', 'PluginSettingsController@getSettings');
-                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/plugin-settings', 'PluginSettingsController@saveSettings');
+                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/plugin-settings/{plentyId}', 'PluginSettingsController@getSettings');
+                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/plugin-settings/{plentyId}', 'PluginSettingsController@saveSettings');
                 //Invoice settings
-                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/invoice-settings', 'InvoiceSettingsController@getSettings');
-                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/invoice-settings', 'InvoiceSettingsController@saveSettings');
+                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/invoice-settings/{plentyId}', 'InvoiceSettingsController@getSettings');
+                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/invoice-settings/{plentyId}', 'InvoiceSettingsController@saveSettings');
                 //Invoice guaranteed B2C settings
-                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteed-settings', 'InvoiceGuaranteedSettingsController@getSettings');
-                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteed-settings', 'InvoiceGuaranteedSettingsController@saveSettings');
+                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteed-settings/{plentyId}', 'InvoiceGuaranteedSettingsController@getSettings');
+                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteed-settings/{plentyId}', 'InvoiceGuaranteedSettingsController@saveSettings');
                 //Invoice guaranteed B2B settings
-                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteedb2b-settings', 'InvoiceGuaranteedB2BSettingsController@getSettings');
-                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteedb2b-settings', 'InvoiceGuaranteedB2BSettingsController@saveSettings');
+                $apiRouter->get(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteedb2b-settings/{plentyId}', 'InvoiceGuaranteedB2BSettingsController@getSettings');
+                $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/invoice-guaranteedb2b-settings/{plentyId}', 'InvoiceGuaranteedB2BSettingsController@saveSettings');
                 
                 //Plugin DB manipulation
                 $apiRouter->post(PluginConfiguration::PLUGIN_NAME.'/reset', 'TestController@reset');

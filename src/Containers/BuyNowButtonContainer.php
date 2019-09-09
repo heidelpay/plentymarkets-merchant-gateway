@@ -8,6 +8,7 @@ use HeidelpayMGW\Helpers\PaymentHelper;
 use HeidelpayMGW\Configuration\PluginConfiguration;
 use HeidelpayMGW\Repositories\InvoiceGuaranteedSettingRepository;
 use HeidelpayMGW\Repositories\InvoiceGuaranteedB2BSettingRepository;
+use Plenty\Plugin\Application;
 
 /**
 * Returns rendered BuyNowButton twig template
@@ -50,7 +51,8 @@ class BuyNowButtonContainer
         PaymentHelper $paymentHelper,
         InvoiceGuaranteedSettingRepository $invoiceGuaranteedRepo,
         InvoiceGuaranteedB2BSettingRepository $invoiceGuaranteedB2BRepo,
-        ApiKeysHelper $apiKeysHelper
+        ApiKeysHelper $apiKeysHelper,
+        Application $app
     ): string {
         $data = [
             'mopList' => $paymentHelper->getPaymentMethodList(),
@@ -58,9 +60,9 @@ class BuyNowButtonContainer
             'routeName' => PluginConfiguration::PLUGIN_NAME,
             'invoice' => PluginConfiguration::PAYMENT_KEY_INVOICE,
             'invoiceGuaranteed' => PluginConfiguration::PAYMENT_KEY_INVOICE_GUARANTEED,
-            'useInvoiceFactoring' => $invoiceGuaranteedRepo->get()->guaranteedOrFactoring,
+            'useInvoiceFactoring' => $invoiceGuaranteedRepo->get($app->getPlentyId())->guaranteedOrFactoring,
             'invoiceGuaranteedB2B' => PluginConfiguration::PAYMENT_KEY_INVOICE_GUARANTEED_B2B,
-            'useInvoiceB2BFactoring' => $invoiceGuaranteedB2BRepo->get()->guaranteedOrFactoring
+            'useInvoiceB2BFactoring' => $invoiceGuaranteedB2BRepo->get($app->getPlentyId())->guaranteedOrFactoring
         ];
 
         return $twig->render(

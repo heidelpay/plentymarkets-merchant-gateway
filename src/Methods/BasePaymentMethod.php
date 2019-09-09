@@ -5,6 +5,7 @@ namespace HeidelpayMGW\Methods;
 use Plenty\Plugin\Application;
 use HeidelpayMGW\Services\BasketService;
 use HeidelpayMGW\Configuration\PluginConfiguration;
+use HeidelpayMGW\Helpers\Loggable;
 use Plenty\Modules\Payment\Method\Contracts\PaymentMethodService;
 
 /**
@@ -32,6 +33,8 @@ use Plenty\Modules\Payment\Method\Contracts\PaymentMethodService;
 */
 class BasePaymentMethod extends PaymentMethodService
 {
+    use Loggable;
+
     const AVAILABLE_COUNTRIES = [];
 
     /** @var mixed $settings  Settings model of a payment method */
@@ -47,7 +50,7 @@ class BasePaymentMethod extends PaymentMethodService
      */
     public function __construct($settingRepository)
     {
-        $this->settings = $settingRepository->get();
+        $this->settings = $settingRepository->get(pluginApp(Application::class)->getPlentyId());
         $this->basketService = pluginApp(BasketService::class);
     }
 

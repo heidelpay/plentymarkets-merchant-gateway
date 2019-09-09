@@ -29,8 +29,11 @@ use Plenty\Modules\Plugin\DataBase\Contracts\Model;
  */
 class PluginSetting extends Model
 {
-    /** @var int $id Model ID in the database. We don't need autoincrement so we set ID always to 1 */
-    public $id = 1;
+    /** @var int $id Model ID in the database */
+    public $id = 0;
+
+    /** @var int $plentyId The ID of plenty shop that settings are saved for */
+    public $plentyId = 0;
 
     /** @var string $publicKey Heidelpay API key */
     public $publicKey = '';
@@ -60,6 +63,7 @@ class PluginSetting extends Model
      */
     public function set($data): PluginSetting
     {
+        $this->plentyId = $data['plentyId'];
         // if parameter is null we set default value
         $this->publicKey = $data['publicKey'] ?? '';
         $this->privateKey = $data['privateKey'] ?? '';

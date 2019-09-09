@@ -55,9 +55,11 @@ class BaseSettingRepository
      *
      * @return mixed
      */
-    public function get()
+    public function get($plentyId)
     {
-        return $this->database->query($this->modelClass)->get()[0] ?? $this->emptyModel;
+        return $this->database->query($this->modelClass)
+            ->where('plentyId', '=', $plentyId)
+            ->get()[0] ?? $this->emptyModel;
     }
 
     /**
@@ -65,9 +67,10 @@ class BaseSettingRepository
      *
      * @param array $data
      */
-    public function save(array $data)
+    public function save($plentyId, array $data)
     {
-        $model = $this->get()->set($data);
+        $data['plentyId'] = $plentyId;
+        $model = $this->get($plentyId)->set($data);
 
         $this->database->save($model);
         

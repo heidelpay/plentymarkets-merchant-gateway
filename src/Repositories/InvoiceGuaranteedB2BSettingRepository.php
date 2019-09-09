@@ -3,6 +3,7 @@
 namespace HeidelpayMGW\Repositories;
 
 use HeidelpayMGW\Models\InvoiceGuaranteedB2BSetting;
+use Plenty\Plugin\Application;
 
 /**
  * Invoice guaranteed B2B settings repository
@@ -46,7 +47,7 @@ class InvoiceGuaranteedB2BSettingRepository extends BaseSettingRepository
      */
     public function getReturnCode(string $returnId): string
     {
-        $model = $this->get();
+        $model = $this->get(pluginApp(Application::class)->getPlentyId());
 
         if ($model->reasonCodeCancel === $returnId) {
             return 'CANCEL';

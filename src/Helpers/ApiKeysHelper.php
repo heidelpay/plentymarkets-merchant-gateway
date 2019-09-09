@@ -4,6 +4,7 @@ namespace HeidelpayMGW\Helpers;
 
 use HeidelpayMGW\Configuration\PluginConfiguration;
 use HeidelpayMGW\Repositories\PluginSettingRepository;
+use Plenty\Plugin\Application;
 
 /**
 * Returns Api keys depending if it's sandbox or production mode
@@ -33,9 +34,11 @@ class ApiKeysHelper
     /** @var \HeidelpayMGW\Models\PluginSetting $settings */
     private $settings;
 
-    public function __construct(PluginSettingRepository $pluginSettingRepository)
-    {
-        $this->settings = $pluginSettingRepository->get();
+    public function __construct(
+        PluginSettingRepository $pluginSettingRepository,
+        Application $app
+    ) {
+        $this->settings = $pluginSettingRepository->get($app->getPlentyId());
     }
 
     /**
