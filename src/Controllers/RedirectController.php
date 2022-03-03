@@ -2,9 +2,11 @@
 
 namespace HeidelpayMGW\Controllers;
 
+use IO\Helper\RouteConfig;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Response;
 use HeidelpayMGW\Helpers\Loggable;
+use HeidelpayMGW\Helpers\UrlHelper;
 use HeidelpayMGW\Helpers\SessionHelper;
 use HeidelpayMGW\Configuration\PluginConfiguration;
 use HeidelpayMGW\Repositories\PluginSettingRepository;
@@ -95,16 +97,16 @@ class RedirectController extends Controller
                     'libResponse' => $libResponse,
                 ]
             );
-            return $response->redirectTo('checkout');
+            return $response->redirectTo(pluginApp(UrlHelper::class)->getRedirectUrl(RouteConfig::CHECKOUT));
         }
         if ($libResponse['status'] == 'canceled') {
-            return $response->redirectTo('checkout');
+            return $response->redirectTo(pluginApp(UrlHelper::class)->getRedirectUrl(RouteConfig::CHECKOUT));
         }
         $paymentInformation['transaction']['status'] = $libResponse['status'];
         unset($paymentInformation['transaction']['redirectUrl']);
         $this->sessionHelper->setValue('paymentInformation', $paymentInformation);
         $this->sessionHelper->setValue('paymentResource', $libResponse);
 
-        return $response->redirectTo('place-order');
+        return $response->redirectTo(pluginApp(UrlHelper::class)->getRedirectUrl(RouteConfig::PLACE_ORDER));
     }
 }

@@ -3,6 +3,10 @@ Sämtliche relevanten Änderungen an diesem Projekt werden in dieser Datei dokum
 
 Das Format basiert auf [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) und dieses Projekt hält sich an [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.3][1.0.3]
+### Fix
+- Die Sprache des Kunden wird nun im Redirect in den Shop berücksichtigt.
+
 ## [1.0.2][1.0.2]
 ### Fix
 - Der Link zum Handbuch wurde korrigiert 

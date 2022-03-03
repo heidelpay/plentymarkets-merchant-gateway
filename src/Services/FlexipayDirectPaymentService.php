@@ -92,7 +92,7 @@ class FlexipayDirectPaymentService extends AbstractPaymentService
     {
         $data = parent::prepareChargeRequest($payment);
         $data['route'] = parent::getBaseUrl().'/'.PluginConfiguration::PLUGIN_NAME.'/process-redirect';
-        
+
         return $data;
     }
 

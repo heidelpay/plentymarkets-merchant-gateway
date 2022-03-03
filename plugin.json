@@ -8,7 +8,7 @@
     "namespace": "HeidelpayMGW",
 
     "type": "payment",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "license": "Apache-2.0",
     "isClosedSource": false,
     "price": 0.00,

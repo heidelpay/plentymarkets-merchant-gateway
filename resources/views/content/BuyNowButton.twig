@@ -26,7 +26,7 @@ function prepareHeidelpayPayment() {
     document.getElementById('checkoutButtonHeidelpayArrow').className = 'fa fa-circle-o-notch fa-spin';
     const placeOrderComponent = getHeidelpayPlaceOrderComponent();
     if (placeOrderComponent.validateCheckout()) {
-        var heidelpayInstance = new heidelpay('{{publicKey}}');
+        var heidelpayInstance = new heidelpay('{{publicKey}}', {locale: App.language});
         for (mop of mopList) {
             if (mop.id === getHeidelpayBasketMOP() && mop.paymentKey === '{{invoice}}') {
                 heidelpayPayment(placeOrderComponent, heidelpayInstance.Invoice());
@@ -238,12 +238,14 @@ function heidelpayPayment(placeOrderComponent, paymentInstance) {
         paymentInstance.createResource()
             .then(data => {
                 let post;
+                const lang = App.language;
                 if (window.b2bCustomer) {
                     let heidelpayB2bCustomer = gatherHeidelpayB2bData(window.b2bCustomer);
-                    post = {data, heidelpayBirthDate, heidelpayB2bCustomer};
+                    post = {data, heidelpayBirthDate, heidelpayB2bCustomer, lang};
                 } else {
-                    post = {data, heidelpayBirthDate};
+                    post = {data, heidelpayBirthDate, lang};
                 }
+
                 fetch('/{{routeName}}/payment-type/', {
                     method: 'POST', 
                     body: JSON.stringify(post),
