@@ -10,17 +10,16 @@ use HeidelpayMGW\Helpers\PaymentHelper;
 use HeidelpayMGW\Helpers\SessionHelper;
 use Plenty\Plugin\Translation\Translator;
 use Plenty\Modules\Order\Models\OrderType;
-use HeidelpayMGW\Methods\SepaDirectDebitPaymentMethod;
 use HeidelpayMGW\Models\PaymentInformation;
+use HeidelpayMGW\Methods\CardsPaymentMethod;
 use HeidelpayMGW\Methods\IdealPaymentMethod;
 use Plenty\Modules\Document\Models\Document;
 use HeidelpayMGW\Methods\PaypalPaymentMethod;
 use HeidelpayMGW\Methods\SofortPaymentMethod;
 use HeidelpayMGW\Methods\InvoicePaymentMethod;
-use HeidelpayMGW\Methods\FlexiPayDirectPaymentMethod;
-use HeidelpayMGW\Methods\CardsPaymentMethod;
 use HeidelpayMGW\Configuration\PluginConfiguration;
-use HeidelpayMGW\Methods\SepaDirectDebitGuaranteedPaymentMethod;
+use HeidelpayMGW\Methods\FlexiPayDirectPaymentMethod;
+use HeidelpayMGW\Methods\SepaDirectDebitPaymentMethod;
 use HeidelpayMGW\Providers\PluginRouteServiceProvider;
 use Plenty\Modules\Order\Pdf\Models\OrderPdfGeneration;
 use HeidelpayMGW\Methods\InvoiceGuaranteedPaymentMethod;
@@ -28,11 +27,13 @@ use Plenty\Modules\Basket\Events\Basket\AfterBasketCreate;
 use Plenty\Modules\Payment\Events\Checkout\ExecutePayment;
 use HeidelpayMGW\Methods\InvoiceGuaranteedPaymentMethodB2b;
 use HeidelpayMGW\Repositories\PaymentInformationRepository;
+use Plenty\Modules\Frontend\Events\FrontendLanguageChanged;
 use HeidelpayMGW\EventProcedures\RefundTransactionProcedure;
 use Plenty\Modules\Order\Pdf\Events\OrderPdfGenerationEvent;
 use HeidelpayMGW\EventProcedures\AuthorizationChargeProcedure;
 use HeidelpayMGW\EventProcedures\FinalizeTransactionProcedure;
 use Plenty\Modules\Basket\Events\BasketItem\AfterBasketItemAdd;
+use HeidelpayMGW\Methods\SepaDirectDebitGuaranteedPaymentMethod;
 use Plenty\Modules\EventProcedures\Services\Entries\ProcedureEntry;
 use Plenty\Modules\EventProcedures\Services\EventProceduresService;
 use Plenty\Modules\Payment\Events\Checkout\GetPaymentMethodContent;
@@ -93,6 +94,14 @@ class PluginServiceProvider extends ServiceProvider
         PaymentInformationRepository $paymentInformationRepository,
         EventProceduresService $eventProceduresService
     ) {
+        // Listen for the language changed event
+        $eventDispatcher->listen(
+            FrontendLanguageChanged::class,
+            function (FrontendLanguageChanged $event) use ($sessionHelper) {
+                $sessionHelper->setValue('frontendLocale', $event->getLanguage());
+            }
+        );
+        
         // Invoice
         $payContainer->register(
             PluginConfiguration::PLUGIN_KEY.'::'.PluginConfiguration::PAYMENT_KEY_INVOICE,
@@ -320,7 +329,8 @@ class PluginServiceProvider extends ServiceProvider
     {
         return [
             AfterBasketItemAdd::class,
-            AfterBasketCreate::class
+            AfterBasketCreate::class,
+            FrontendLanguageChanged::class,
         ];
     }
 }

@@ -29,7 +29,7 @@ class PluginConfiguration
 {
     // Plugin
     const PLUGIN_NAME = 'HeidelpayMGW';
-    const PLUGIN_VERSION = '1.0.2';
+    const PLUGIN_VERSION = '1.0.3';
     const PLUGIN_KEY = 'HeidelpayMGWPaymentPlugin';
 
     // Plugin payment methods

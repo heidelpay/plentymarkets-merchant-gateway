@@ -2,6 +2,7 @@
 
 namespace HeidelpayMGW\Helpers;
 
+use IO\Helper\RouteConfig;
 use HeidelpayMGW\Helpers\Loggable;
 use HeidelpayMGW\Helpers\OrderHelper;
 use Plenty\Modules\Order\Models\Order;
@@ -314,7 +315,7 @@ class PaymentHelper
         }
 
         return [
-            'value' => null,
+            'value' => pluginApp(UrlHelper::class)->getRedirectUrl(RouteConfig::PLACE_ORDER),
             'type' => GetPaymentMethodContent::RETURN_TYPE_CONTINUE
         ];
     }

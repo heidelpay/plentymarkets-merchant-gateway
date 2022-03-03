@@ -60,6 +60,7 @@ class PaymentTypeController extends Controller
         $sessionHelper->setValue('paymentResource', $data);
         $sessionHelper->setValue('heidelpayBirthDate', $heidelpayBirthDate);
         $sessionHelper->setValue('heidelpayB2bCustomer', $heidelpayB2bCustomer);
+        $sessionHelper->setValue('frontendLocale', $frontendData['lang']);
 
         return $response->json([
             'success' => true
